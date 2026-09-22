@@ -4,7 +4,7 @@ Post-hoc **surrogate safety measure (SSM)** analysis for interactions between an
 
 Given a timestamp flagged as an "anomalous" or interesting event, the notebook reconstructs the local traffic scene around the shuttle at that moment, identifies every nearby vehicle and pedestrian, and computes a set of dimension-aware, heading-aware safety indicators for each shuttle–agent pair (Time-to-Collision, Post-Encroachment Time, Deceleration Rate to Avoid a Crash, Distance Headway, lane-encroachment classification, with a plain-language narrative). It also produces a bird's-eye-view 2D plot of the scene.
 
-This code was developed as part of research carried out by **Fondazione LINKS** and **Politecnico di Torino**, and accompanies an academic publication (see [Citation]).
+This code was developed as part of research carried out by **Fondazione LINKS** and **Politecnico di Torino**, and accompanies an academic publication (see [Citation](#citation)).
 
 ## What this code does
 
