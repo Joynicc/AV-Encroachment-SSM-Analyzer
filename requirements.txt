@@ -1,0 +1,9 @@
+numpy
+pandas
+geopandas
+movingpandas
+shapely
+holoviews
+hvplot
+matplotlib
+jupyter
