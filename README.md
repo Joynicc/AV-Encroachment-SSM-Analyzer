@@ -1,8 +1,8 @@
-# Autonomous Shuttle Safety Analysis
+# Encroachment-Aware Safety Analysis for Autonomous Shuttles
 
-Post-hoc **surrogate safety measure (SSM)** analysis for interactions between an autonomous shuttle and surrounding road users (vehicles and pedestrians), computed from georeferenced object trajectories extracted from roadside video.
+Post-hoc encroachment-aware surrogate safety measure (SSM) analysis of interactions between an autonomous shuttle and surrounding road users (vehicles and pedestrians), based on georeferenced object trajectories extracted from roadside video. Safety measures are selected and computed according to the type of spatial and traffic interaction/encroachment identified between the shuttle and each surrounding agent.
 
-Given a timestamp flagged as an "anomalous" or interesting event, the notebook reconstructs the local traffic scene around the shuttle at that moment, identifies every nearby vehicle and pedestrian, and computes a set of dimension-aware, heading-aware safety indicators for each shuttle–agent pair (Time-to-Collision, Post-Encroachment Time, Deceleration Rate to Avoid a Crash, Distance Headway, lane-encroachment classification, with a plain-language narrative). It also produces a bird's-eye-view 2D plot of the scene.
+Given a timestamp flagged as an "anomalous" or interesting event, the notebook reconstructs the local traffic scene around the shuttle, identifies nearby vehicles and pedestrians, classifies the type of interaction or encroachment for each shuttle–agent pair, and computes the corresponding dimension-aware, heading-aware safety measures (Time-to-Collision, Post-Encroachment Time, Deceleration Rate to Avoid a Crash, Distance Headway, etc.). It also produces a bird's-eye-view 2D plot of the scene.
 
 This code was developed as part of research carried out by **Fondazione LINKS** and **Politecnico di Torino**, and accompanies an academic publication (see [Citation](#citation)).
 
@@ -12,11 +12,11 @@ The notebook operates on a table of per-object, per-frame trajectory points (typ
 
 1. **Builds trajectories.** Loads the trajectory table into a `movingpandas.TrajectoryCollection`, grouped by object class and object ID, and splits it into four groups: the shuttle, moving cars, parked cars, and pedestrians.
 2. **Defines the scene geometry.** A block of named constants describes the physical footprint of the shuttle, cars, and pedestrians (length/width in meters), the road/lane geometry, and the thresholds used to flag a conflict (proximity radius, forward corridor length, critical/warning TTC, PET, and DRAC values). These are the parameters to tune for a different vehicle, road, or study design.
-3. **Classifies each nearby agent relative to the shuttle**, for a chosen event timestamp and a time window (default ±5 s) around it:
+3. **Classifies the interaction and encroachment type for each nearby agent**, for a chosen event timestamp and a time window (default ±5 s) around it:
    - relative position (front/rear/left/right/etc.) and forward/lateral offset in the shuttle's own reference frame;
    - heading and speed, and whether the agent is moving in the same direction, the opposite direction, or crossing the shuttle's path;
-   - lane relationship (same lane, adjacent lane, oncoming lane, or a crossing conflict), using oriented-bounding-box (OBB) projections so that vehicle/pedestrian size and heading are taken into account rather than treating agents as points.
-4. **Computes surrogate safety measures** for each shuttle–agent pair:
+   - encroachment/interaction type (same-lane following, adjacent-lane interaction, oncoming traffic, crossing conflict, overtaking/cut-in, etc.), using oriented-bounding-box (OBB) projections so that vehicle/pedestrian dimensions and heading are explicitly considered rather than treating agents as points.
+4. **Computes encroachment-specific surrogate safety measures** for each shuttle–agent pair (The SSMs are not applied uniformly to all interactions; the measures and formulations are selected according to the identified encroachment/interaction type):
    - **TTC (Time-to-Collision)** — two formulations: a dimension-aware car-following/lane-based TTC, and a Hydén-style crossing-path TTC/PET pair for path-crossing conflicts;
    - **PET (Post-Encroachment Time)**, including a cut-in/overtaking variant;
    - **DRAC (Deceleration Rate to Avoid a Crash)**;
